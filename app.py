@@ -46,4 +46,4 @@ def show_user_details(user_id):
 def show_edit_page():
     """Takes user to the edit page and makes any changes to the db"""
     
-    return render_template("edit_user.html")
+    return render_template("edit-user.html")
