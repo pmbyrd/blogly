@@ -1,0 +1,16 @@
+{% extends "base.html"%}
+
+{% block title %} User Detail {% endblock %}
+
+<!-- display the user from the db -->
+
+<div class="user-details">
+    <div class="profile-pic">{{user.id.image_url}}</div>
+    <div class="user-fullname">
+        {{user.first_name}} {{user.last_name}}
+    </div>
+</div>
+
+{% block content%}
+
+{%endblock%}
