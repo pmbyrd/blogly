@@ -1,20 +1,21 @@
 {% extends "base.html"%}
 
 {% block title %} Edit User {% endblock %}
+{% block content%}
 
 <!-- modify the form with the db values -->
-<form action="user-detail" method="post">
-    <label for="first-name">First Name
+<form action="edit-user" method="post">
+    <label for="first-name">{{user.first_name}}
         <input type="text" id="first-name" placeholder="Enter a first name">
     </label>
-    <label for="last-name">Last Name
+    <label for="last-name">{{user.last_name}}
         <input type="text" id="last-name" placeholder="Enter a last name">
     </label>
-    <label for="image-url">Image URL
+    <label for="image-url">{{user.image_url}}
         <input type="text" id="image-url" placeholder="Provide a url for an image">
     </label>
     <button>Cancel</button>
     <button>Save</button>
 </form>
-{% block content%}
+{%endblock%}
 

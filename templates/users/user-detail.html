@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %} User Detail {% endblock %}
+{% block content%}
+
+<div class="user-details">
+    <div class="profile-pic">{{user.image_url}}</div>
+    <div class="user-fullname">
+        {{user.first_name}} {{user.last_name}}
+    </div>
+</div>
+
+<form action="/edit">
+    <div>
+        <label for="edit-btn"></label>
+        <button type="submit" name="edit-btn">Edit</button>
+    </div>
+</form>
+<form action="/delete">
+    <div>
+        <label for="delete-btn"></label>
+        <button type="submit" name="delete-btn">Delete</button>
+    </div>
+</form>
+
+
+
+{%endblock%}
