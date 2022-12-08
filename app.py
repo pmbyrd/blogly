@@ -5,7 +5,6 @@ from flask_sqlalchemy import SQLAlchemy
 from models import db, connect_db, User
 # import seed
 
-# User = User()
 
 app = Flask(__name__)
 
@@ -21,33 +20,33 @@ app.config['USE_DEBUGGER'] = True
 app.config['SECRET_KEY'] = 'secret_key'
 
 @app.route('/')
+def root():
+    """Homepage that redirects to all users"""
+    return redirect("/users")
+
+@app.route('/users')
 def show_users_home():
     """Shows all users"""
     # must get the db to display the users
     users = User.query.all()
-    return render_template("home.html", users=users)
+    return render_template("users/home.html", users=users)
 
-@app.route('/users')
-def show_all_users():
-    """Shows all users"""
-    users = User.query.all()
-    return redirect("/")
-
-@app.route('/new-user')
+@app.route('/users/new', methods=["GET"])
 def create_new_user():
     """Shows new user form and creates a new user from the inputs"""
     
-    return render_template("new-user.html")
+    return render_template("users/new.html")
+
 
 
 # the user detail route must follow that user.id
-@app.route('/user-detail/<int:user_id>')
+@app.route('/users/<int:user_id>/detail')
 def show_user_details(user_id):
     """Shows the details of the user"""
     user = User.query.get_or_404(user_id)
-    return render_template("user-detail.html", user=user)
+    return render_template("users/detail.html", user=user)
 
-@app.route('/new-user', methods=["POST"])
+@app.route('/users/new', methods=["POST"])
 def create_user():
     """Gets the new user details from the page and post them to the db"""
     # get the user inputs from the form if user input are vaild show that new user
@@ -58,20 +57,30 @@ def create_user():
     db.session.add(user)
     db.session.commit()
     # import pdb; pdb.set_trace()
-    return redirect(f"/user-detail/{user.id}")
+    return redirect("/users")
 
-@app.route('/edit')
-def get_edit_page():
-    user = User.query.get_or_404(user)
-    return render_template("edit-user.html")
-# @app.route('/user-detail/<int:user_id>')
-# def show_user_details(user_id):
-#     """Takes user to the edit page and makes any changes to the db"""
-#     user = User.query.get_or_404(user_id)
-#     return render_template("edit-user.html", user=user)
+@app.route('/users/<int:user_id>/edit')
+def get_edit_page(user_id):
+    """Takes the user to the edit page"""
+    user = User.query.get_or_404(user_id)
+    return render_template("users/edit.html", user=user)
 
-# @app.route('/delete-user/<int:user_id>')
-# def show_user_details(user_id):
-#     """Takes user to the delete page and makes any changes to the db"""
-#     user = User.query.get_or_404(user_id)
-#     return render_template("delete-user.html", user=user)
+@app.route('/users/<int:user_id>/edit', methods=["POST"])
+def edit_user(user_id):
+    """Edits user and updates database"""
+    user = User.query.get_or_404(user_id)
+    first_name = request.form["first-name"]
+    last_name = request.form["last-name"]
+    image_url = request.form["image-url"]
+    
+    db.session.add(user)
+    db.session.commit()
+    
+    return redirect("/users")
+    
+    
+@app.route('/users/<int:user_id>/delete')
+def get_delete_page(user_id):
+    """Takes user to the delete page"""
+    user = User.query.get_or_404(user_id)
+    return render_template("users/delete.html", user=user)
