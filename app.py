@@ -71,9 +71,9 @@ def get_edit_page(user_id):
 def edit_user(user_id):
     """Edits user and updates database"""
     user = User.query.get_or_404(user_id)
-    first_name = request.form["first-name"]
-    last_name = request.form["last-name"]
-    image_url = request.form["image-url"]
+    user.first_name = request.form["first-name"]
+    user.last_name = request.form["last-name"]
+    user.image_url = request.form["image-url"]
     
     db.session.add(user)
     db.session.commit()
@@ -98,25 +98,57 @@ def delete_user(user_id):
 # **Establish the post routes **
 
 # the route need the user so the relationship stays connected
-@app.route('/users/posts/new')
-def show_post_page():
-    """Shows the post page and form for making a new post"""
+# TODO route for user new post ** method GET 
+# *The route should follow the user id to keep that relationship
+@app.route('/users/<int:user_id>/posts/new')
+def get_new_post_page(user_id):
+    """Takes user to the new post page for creating a new post and submit it to the database"""
+    user = User.query.get_or_404(user_id)
     
-    return render_template("users/posts/new.html")
+    return render_template("users/posts/new.html", user=user) #*working
+    
+# TODO route for user post ** method POST*
+# *Get values from the page and save them to the database to create a new post
+@app.route('/users/<int:user_id>/posts/new', methods=["POST"])
+def create_post(user_id):
+    """Creates a new post and saves to the database"""
+    return redirect ('/users/posts/detail') 
 
+# TODO route for post detail page
+@app.route('/users/posts/<int:post_id>')
+def show_post(post_id):
+    """Shows user post and allows for them to edit a post"""
+    post = Post.query.get_or_404(post_id)
+    return render_template("users/posts/detail.html", post=post) #*working
 
-# @app.route('/posts/<int:post_id>')
-# def show_user_post():
-#     """A Page that shows the users post and buttons to edit or delete a post"""
-#     return render_template("posts/detail.html")
+# TODO route for user to edit post ** method GET
+@app.route('/users/posts/<int:post_id>/edit')
+def create_post(post_id):
+    """Takes user to the post editing page"""
+    
+    post = Post.query.get_or_404(post_id)
+    return render_template("users/posts/edit.html", post=post) #*working
 
-# @app.route('/posts/<int:post_id>/detail', methods=["POST"])
-# def edit_post():
-#     """Allows user to edit post"""
-#     return redirect('/posts/detail')
-
-# @app.route('/posts/<int:post_id>')
+# TODO route for user edit ** method POST
+# ***get the values from the page for editing and post
+# @app.route('/users/posts/<int:post_id>/edit', methods=["POST"])
 # def edit_post(post_id):
-#     """Allows user to edit post"""
-#     return render_template("usess/posts/edit.html")
+#     """Allows user to edit a post and saves edit to the database"""
+#     post = Post.query.get_or_404(post_id)
+#     post.title = request.form["title"] or None
+#     post.content = request.form["content"] or None
+    
+#     db.session.add(post)
+#     db.session.commit()
+#     return redirect(f'"/users/posts/{post.user_id}')
+
+# TODO route for user delete ** method POST
+@app.route('/users/posts/<int:post_id>', methods=["POST"])
+def delete_post(post_id):
+    """Allow for user to delete a post"""
+    post = Post.query.get_or_404(post_id)
+    db.session.delete(post)
+    db.session.commit()
+    
+    return redirect (f"/users/{post.user_id}")
     

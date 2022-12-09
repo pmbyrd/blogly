@@ -2,6 +2,15 @@
 
 {% block content %}
 
+{{post.title}}
+
+{{post.content}}
+
+<div class="container">
+    <a href="/users" class="btn">Cancel</a>
+    <a href="/users/posts/edit" class="btn">Edit</a>
+    <a href="/users/posts/delete" class="btn">Delete</a>
+</div>
 
 
 {%endblock%}

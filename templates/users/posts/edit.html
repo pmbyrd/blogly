@@ -2,6 +2,19 @@
 
 {% block content %}
 
+<form action="/users/posts/{{ user.post.id }}" method="post">
+    <label for="title">Title
+    <input type="text" name="title" id="title" value="{{user.post.title}}">
+    </label>
 
+    <label for="content">Post Content
+        <textarea name="content" id="content" cols="30" rows="10">
+            {{user.post.content}}
+        </textarea>
+    </label>
+
+    <a href="/users" class="btn btn-primary">Cancel</a>
+    <button class="btn btn-primary">Add</button>
+</form>
 
 {%endblock%}
