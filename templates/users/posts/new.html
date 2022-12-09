@@ -1,0 +1,24 @@
+{% extends "base.html"%}
+
+{% block title %} New Post {% endblock %}
+
+{% block content%}
+
+  
+
+    <form action="/users" method="post">
+        <label for="title">Title
+        <input type="text" name="title" id="title">
+        </label>
+
+        <label for="content">Post Content
+            <textarea name="content" id="content" cols="30" rows="10"></textarea>
+        </label>
+
+        <a href="/users" class="btn btn-primary">Cancel</a>
+        <button class="btn btn-primary">Add</button>
+    </form>
+
+
+
+{%endblock%}

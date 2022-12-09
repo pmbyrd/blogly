@@ -10,13 +10,13 @@
     </div>
 </div>
 
-<form action="/users/{{ user.id }}/edit">
+<form action="/users/{{ user.id }}/edit" method="get">
     <div>
         <label for="edit-btn"></label>
         <button type="submit" name="edit-btn">Edit</button>
     </div>
 </form>
-<form action="/users/{{ user.id }}/delete">
+<form action="/users/{{ user.id }}/delete" method="post">
 
     <div>
         <label for="delete-btn"></label>
@@ -24,6 +24,21 @@
     </div>
 </form>
 
+<h3>
+    POSTS
+    <!-- TODO loop over list of post for this user-->
+    <ul>
+        {% for post in posts %}
+    
+            <li><a href="/users/{{user.id}}/posts">{{post.title}}</a></li>
+        {%endfor%}
+    </ul>
+    
+
+</h3>
+<form action="/users/{{user.id}}/posts/new">
+    <button>Add Post</button>
+</form>
 
 
 {%endblock%}

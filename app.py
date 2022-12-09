@@ -2,7 +2,7 @@
 
 from flask import Flask, render_template, redirect, request, debughelpers
 from flask_sqlalchemy import SQLAlchemy
-from models import db, connect_db, User
+from models import db, connect_db, User, Post
 # import seed
 
 
@@ -44,7 +44,9 @@ def create_new_user():
 def show_user_details(user_id):
     """Shows the details of the user"""
     user = User.query.get_or_404(user_id)
-    return render_template("users/detail.html", user=user)
+    # todo add the post to the page
+    posts = Post.query.filter_by(user_id=user_id)
+    return render_template("users/detail.html", user=user, posts=posts)
 
 @app.route('/users/new', methods=["POST"])
 def create_user():
@@ -91,3 +93,30 @@ def delete_user(user_id):
     db.session.delete(user)
     db.session.commit()
     return redirect('/users')
+
+
+# **Establish the post routes **
+
+# the route need the user so the relationship stays connected
+@app.route('/users/posts/new')
+def show_post_page():
+    """Shows the post page and form for making a new post"""
+    
+    return render_template("users/posts/new.html")
+
+
+# @app.route('/posts/<int:post_id>')
+# def show_user_post():
+#     """A Page that shows the users post and buttons to edit or delete a post"""
+#     return render_template("posts/detail.html")
+
+# @app.route('/posts/<int:post_id>/detail', methods=["POST"])
+# def edit_post():
+#     """Allows user to edit post"""
+#     return redirect('/posts/detail')
+
+# @app.route('/posts/<int:post_id>')
+# def edit_post(post_id):
+#     """Allows user to edit post"""
+#     return render_template("usess/posts/edit.html")
+    
