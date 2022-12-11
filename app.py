@@ -131,16 +131,16 @@ def create_post(post_id):
 
 # TODO route for user edit ** method POST
 # ***get the values from the page for editing and post
-# @app.route('/users/posts/<int:post_id>/edit', methods=["POST"])
-# def edit_post(post_id):
-#     """Allows user to edit a post and saves edit to the database"""
-#     post = Post.query.get_or_404(post_id)
-#     post.title = request.form["title"] or None
-#     post.content = request.form["content"] or None
+@app.route('/users/posts/<int:post_id>/edit', methods=["POST"])
+def edit_post(post_id):
+    """Allows user to edit a post and saves edit to the database"""
+    post = Post.query.get_or_404(post_id)
+    post.title = request.form["title"] or None
+    post.content = request.form["content"] or None
     
-#     db.session.add(post)
-#     db.session.commit()
-#     return redirect(f'"/users/posts/{post.user_id}')
+    db.session.add(post)
+    db.session.commit()
+    return redirect(f'"/users/posts/{post.user_id}')
 
 # TODO route for user delete ** method POST
 @app.route('/users/posts/<int:post_id>', methods=["POST"])
