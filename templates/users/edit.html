@@ -4,7 +4,28 @@
 {% block content%}
 
 <!-- modify the form with the db values -->
-<form action="/users/{{ user.id }}/edit" method="post">
+<form action="/users/{{user.id}}/edit" method="post">
+
+    <div class="mb-3">
+        <label for="first-name" class="form-label">First Name</label>
+        <input name="first-name" class="form-control" type="text" placeholder="First Name" aria-label="default input example" value="{{user.first_name}}">
+    </div>
+    <div class="mb-3">
+        <label for="last-name" class="form-label">Last Name</label>
+        <input name="last-name" class="form-control" type="text" placeholder="Last Name" aria-label="default input example", value="{{user.last_name}}">
+    </div>
+    <div class="mb-3">
+        <label for="image-url" class="form-label">Url for photo</label>
+        <input name="image-url" class="form-control" type="text" placeholder="Url for photo" aria-label="default input example" value="{{user.image_url}}">
+    </div>
+    <div class="md-3">
+        <button class="btn btn-success" type="submit">Save</button>
+    </div>
+    <div class="md-3">
+        <a href="/users" class="btn btn-danger">Cancel</a>
+    </div>
+</form>
+<!-- <form action="/users/{{ user.id }}/edit" method="post">
     <label for="first-name">{{user.first_name}}
         <input type="text" id="first-name" placeholder="Enter a first name">
     </label>
@@ -20,6 +41,6 @@
 
 <form action="/users">
     <button>Cancel</button>
-</form>
+</form> -->
 {%endblock%}
 

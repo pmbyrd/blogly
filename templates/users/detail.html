@@ -3,39 +3,29 @@
 {% block title %} User Detail {% endblock %}
 {% block content%}
 
-<div class="user-details">
-    <div class="profile-pic">{{user.image_url}}</div>
-    <div class="user-fullname">
-        {{user.first_name}} {{user.last_name}}
+<div class="card" style="width: 18rem;">
+    <img src="{{user.image_url}}" class="card-img-top" alt="user image">
+    <div class="card-body">
+      <p class="card-text">{{user.first_name}} {{user.last_name}}</p>
+        <p class="card-text">
+            <a href="/users/{{user.id}}/edit" class="btn btn-success">Edit User</a>
+            <a href="/users/{{user.id}}/delete" class="btn btn-danger">Delete User</a>
+        </p>
     </div>
-</div>
+  </div>
 
-<form action="/users/{{ user.id }}/edit" method="get">
-    <div>
-        <label for="edit-btn"></label>
-        <button type="submit" name="edit-btn">Edit</button>
-    </div>
-</form>
-<form action="/users/{{ user.id }}/delete" method="post">
 
-    <div>
-        <label for="delete-btn"></label>
-        <button type="submit" name="delete-btn">Delete</button>
-    </div>
-</form>
 
-<h3>
-    POSTS
-    <!-- TODO loop over list of post for this user-->
+<h3> POSTS </h3>
     <ul>
-        {% for post in posts %}
+        {% for post in user.posts %}
     
             <li><a href="/users/posts/{{post.id}}">{{post.title}}</a></li>
         {%endfor%}
     </ul>
     
 
-</h3>
+
 <form action="/users/{{user.id}}/posts/new">
     <button>Add Post</button>
 </form>

@@ -55,11 +55,31 @@ class Post(db.Model):
     
     user = db.relationship("User", backref="users")
     
+    post_tags = db.relationship('Post'
+                                ,secondary='post_tags'
+                                ,backref='tags')
+    
     def __repr__(self):
         return f"<Post {self.title} {self.content} {self.user_id}>"
     
-def get_user_post(user_id):
-    """Get's all associated post by that user"""
-    posts = Post.query.filter_by(user_id=user_id)
-    return posts
+class PostTag(db.Model):
+    """Generates a table for many-to-many relationships"""
+    __tablename__ = "post_tags"
+    
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), primary_key=True)
+    tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), primary_key=True)
+    
+class Tag(db.Model):
+    """Generates a table for post tags"""
+    __tablename__ = "tags"
+    
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(40), unique=True)
+    
+   
+def get_user(user_id):
+    """Queries the database to retrieve a user by their id"""
+    user = User.query.get_or_404(user_id)
+
+    return user
 
