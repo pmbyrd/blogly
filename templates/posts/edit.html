@@ -2,19 +2,25 @@
 
 {% block content %}
 
-<form action="/users/posts/{{ user.post.id }}" method="post">
-    <label for="title">Title
-    <input type="text" name="title" id="title" value="{{user.post.title}}">
-    </label>
+<form action="/posts/{{post.id}}/edit" method="post">
 
-    <label for="content">Post Content
-        <textarea name="content" id="content" cols="30" rows="10">
-            {{user.post.content}}
+    <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input name="title" class="form-control" type="text" value="{{post.title}}" aria-label="default input example">
+    </div>
+    <div class="mb-3">
+        <label for="content" class="form-label">Content</label>
+        <textarea name="content" class="form-control" id="content" rows="3">
+            {{post.content}}
         </textarea>
-    </label>
+      </div>
 
-    <a href="/users" class="btn btn-primary">Cancel</a>
-    <button class="btn btn-primary">Add</button>
+    <div class="md-3">
+        <a href="/users/{{post.id}}/detail" class="btn btn-primary">Cancel</a>
+    </div>
+    <div class="md-3">
+        <button class="btn btn-success" type="submit">Edit</button>
+    </div>
 </form>
 
 {%endblock%}

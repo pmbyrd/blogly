@@ -20,15 +20,10 @@
     <ul>
         {% for post in user.posts %}
     
-            <li><a href="/users/posts/{{post.id}}">{{post.title}}</a></li>
+            <li><a href="/users/{{post.id}}/posts/detail">{{post.title}}</a></li>
         {%endfor%}
     </ul>
     
-
-
-<form action="/users/{{user.id}}/posts/new">
-    <button>Add Post</button>
-</form>
-
+<a href="/users/{{user.id}}/posts/new" class="btn btn-primary">Add Post</a>
 
 {%endblock%}

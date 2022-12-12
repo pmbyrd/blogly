@@ -83,3 +83,9 @@ def get_user(user_id):
 
     return user
 
+def get_post(post_id):
+    """Queries the database to retrieve a post based of of the post id"""
+    post = Post.query.get_or_404(post_id)
+    
+    return post
+
