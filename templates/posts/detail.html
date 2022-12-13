@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% block title %} Post Detail {% endblock %}
 
 {% block content %}
 
@@ -9,6 +10,17 @@
     <div class="card-body">
       <h5 class="card-title">{{post.title}}</h5>
       <p class="card-text">{{post.content}}</p>
+      <p class="card-text">Tags: 
+        <ul class="list-group list-group-horizontal">
+          {% for tag in post.tags %}
+
+          <li class="list-group-item"><a href="/tags/{{tag.id}}/detail" class="btn btn-secondary">
+            {{tag.name}}
+          </a></li>
+
+           {%endfor%}
+        </ul>
+      </p>
       <a href="/users" class="btn btn-primary">Cancel</a>
       <a href="/posts/{{post.id}}/edit" class="btn btn-success">Edit</a>
       <a href="/posts/{{post.id}}/delete" class="btn btn-warning">Delete</a>

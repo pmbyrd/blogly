@@ -54,9 +54,11 @@ class Post(db.Model):
     
     user = db.relationship("User", backref="users")
     
-    tags = db.relationship('Tag',
-                           secondary="post_tags",
-                           backref="tags")
+    # tags = db.relationship('Tag',
+    #                        secondary="post_tags",
+    #                        backref="tags")
+    
+    # post = db.relationship('')
     # post_tags = db.relationship('PostTag', backref="post_tags")
     
     def __repr__(self):
@@ -77,8 +79,9 @@ class Tag(db.Model):
     
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(40), unique=True)
-    post_tags = db.relationship('PostTag', backref="post_tags")
-    
+    posts = db.relationship('Post',
+                            secondary="post_tags",
+                            backref="tags")
    
 def get_user(user_id):
     """Queries the database to retrieve a user by their id"""
@@ -90,4 +93,10 @@ def get_post(post_id):
     """Queries the database to retrieve a post based of of the post id"""
     post = Post.query.get_or_404(post_id) 
     return post
+
+
+def get_tag(tag_id):
+    """Queries the database to retrieve a tag based off the tag id"""
+    tag = Tag.query.get_or_404(tag_id)
+    return tag
 

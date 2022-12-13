@@ -2,7 +2,7 @@
 
 from flask import Flask, render_template, redirect, request, debughelpers
 from flask_sqlalchemy import SQLAlchemy
-from models import db, connect_db, User, Post, PostTag, Tag, get_user, get_post
+from models import db, connect_db, User, Post, PostTag, Tag, get_user, get_post, get_tag
 # import seed
 
 
@@ -28,7 +28,8 @@ def root():
 def show_all_users():
     """Shows all users"""
     users = User.query.all()
-    return render_template('users/home.html', users=users)
+    tags = Tag.query.all()
+    return render_template('users/home.html', users=users, tags=tags)
 
 @app.route('/users/new')
 def show_new_user():
@@ -138,4 +139,58 @@ def handle_post_edit(post_id):
     return redirect(f"/users/{post.id}/posts/detail")
 
 # TODO Routes for tags
+@app.route('/tags')
+def show_all_tags():
+    """Shows all tags"""
+    tags = Tag.query.all()
+    
+    return render_template("tags/tags.html", tags=tags)
+
+@app.route('/tags/new')
+def show_new_tag_page():
+    """Shows page to create a new tag"""
+    return render_template("tags/new.html")
+
+@app.route('/tags/new', methods=["POST"])
+def handle_new_tag():
+    """Handles the creation of a new tag and commits it to the database"""
+    name = request.form["tag-name"]
+    new_tag = Tag(name=name)
+    db.session.add(new_tag)
+    db.session.commit()
+    
+    return redirect('/tags')
+
+@app.route('/tags/<int:tag_id>/detail')
+def show_tag_detail(tag_id):
+    """List tag other associated posts and allows for user to edit
+    or delete that tag"""
+    tag = get_tag(tag_id)
+    posts = tag.posts
+    return render_template("tags/detail.html", tag=tag, posts=posts)
+
+@app.route('/tags/<int:tag_id>/edit')
+def show_tag_edit_page(tag_id):
+    """Shows page for editing a tag"""
+    tag = get_tag(tag_id)
+    return render_template("tags/edit.html", tag=tag)
+
+@app.route('/tags/<int:tag_id>/edit', methods=["POST"])
+def handle_tag(tag_id):
+    """Handles editing a tag and updating the changes to the database"""
+    tag = get_tag(tag_id)
+    tag.name = request.form["tag-name"]
+    db.session.add(tag)
+    db.session.commit()
+    
+    return redirect(f"/tags/{tag.id}/detail")
+
+# @app.route('/tags/<int:tag_id>/delete')
+# def show_delete_page():
+#     """Shows a delete page after a tag has been deleted"""
+#     return render_template("tags/delete.html")
+
+# @app.route('/tags/<int:tag_id>/delete')
+# def handle_
+
 
