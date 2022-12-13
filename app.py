@@ -96,7 +96,8 @@ def delete_user(user_id):
 def show_new_post_page(user_id):
     """Shows page for creating a new post"""
     user = get_user(user_id)
-    return render_template("posts/new.html", user=user)
+    tags = Tag.query.all()
+    return render_template("posts/new.html", user=user, tags=tags)
 
 @app.route('/users/<int:user_id>/posts/new', methods=["POST"])
 def handle_post(user_id):

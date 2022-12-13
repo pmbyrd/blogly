@@ -17,12 +17,23 @@
         <textarea name="content" class="form-control" id="content" rows="3" placeholder="Post content"></textarea>
       </div>
 
+    <!-- Todo add tags for them to be added to a post when a new one is created -->
+    <div class="mb-3">
+        <ul class="list-group">
+            {% for tag in tags%}
+            <li class="list-group-item">
+              <input class="form-check-input me-1" type="checkbox" value="" id="{{tag.id}}">
+              <label class="form-check-label" for="tags">{{tag.name}}</label>
+            </li>
+            {%endfor%}
+    </div>
     <div class="md-3">
         <a href="/users" class="btn btn-primary">Cancel</a>
     </div>
     <div class="md-3">
         <button class="btn btn-success" type="submit">Add</button>
     </div>
+
 </form>
 
 
