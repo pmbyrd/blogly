@@ -29,6 +29,20 @@ t1 = Tag(name="tech")
 t2 = Tag(name="food")
 t3 = Tag(name="cool")
 t4 = Tag(name="random")
+
+pt1 = PostTag(post_id=1, tag_id=1)
+pt2 = PostTag(post_id=1, tag_id=2)
+pt3 = PostTag(post_id=1, tag_id=3)
+pt4 = PostTag(post_id=2, tag_id=1)
+pt5 = PostTag(post_id=2, tag_id=4)
+pt6 = PostTag(post_id=3, tag_id=2)
+pt7 = PostTag(post_id=4, tag_id=2)
+pt8 = PostTag(post_id=5, tag_id=1)
+pt9 = PostTag(post_id=6, tag_id=3)
+pt10 = PostTag(post_id=6, tag_id=4)
+
+
+
 # Add new objects to session, so they'll persist
 db.session.add(user1)
 db.session.add(user2)
@@ -41,6 +55,9 @@ db.session.commit()
 db.session.add_all([p1,p2,p3,p4, p5,p6])
 db.session.commit()
 
+db.session.add_all([pt1, pt2, pt3, pt4, pt5, pt6, pt7, pt8, pt9, pt10])
+db.session.commit()
 # Commit--otherwise, this never gets saved!
+
 
 

@@ -31,13 +31,12 @@ class User(db.Model):
     image_url = db.Column(db.Text,
                           nullable=False,
                           default=DEFAULT_IMAGE_URL)
-    posts = db.relationship("Post")
+    posts = db.relationship("Post", backref="posts")
 
     
 class Post(db.Model):
     """Generates a table for Post in the database"""
     __tablename__ = "posts"
-    
     
     id = db.Column(db.Integer, 
                    primary_key=True,
@@ -55,12 +54,14 @@ class Post(db.Model):
     
     user = db.relationship("User", backref="users")
     
-    post_tags = db.relationship('Post'
-                                ,secondary='post_tags'
-                                ,backref='tags')
+    tags = db.relationship('Tag',
+                           secondary="post_tags",
+                           backref="tags")
+    # post_tags = db.relationship('PostTag', backref="post_tags")
     
     def __repr__(self):
         return f"<Post {self.title} {self.content} {self.user_id}>"
+   
     
 class PostTag(db.Model):
     """Generates a table for many-to-many relationships"""
@@ -68,6 +69,7 @@ class PostTag(db.Model):
     
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), primary_key=True)
     tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), primary_key=True)
+ 
     
 class Tag(db.Model):
     """Generates a table for post tags"""
@@ -75,17 +77,17 @@ class Tag(db.Model):
     
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(40), unique=True)
+    post_tags = db.relationship('PostTag', backref="post_tags")
     
    
 def get_user(user_id):
     """Queries the database to retrieve a user by their id"""
     user = User.query.get_or_404(user_id)
-
     return user
+
 
 def get_post(post_id):
     """Queries the database to retrieve a post based of of the post id"""
-    post = Post.query.get_or_404(post_id)
-    
+    post = Post.query.get_or_404(post_id) 
     return post
 

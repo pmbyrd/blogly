@@ -137,4 +137,5 @@ def handle_post_edit(post_id):
     
     return redirect(f"/users/{post.id}/posts/detail")
 
+# TODO Routes for tags
 
