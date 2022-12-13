@@ -96,7 +96,8 @@ def delete_user(user_id):
 def show_new_post_page(user_id):
     """Shows page for creating a new post"""
     user = get_user(user_id)
-    return render_template("posts/new.html", user=user)
+    tags = Tag.query.all()
+    return render_template("posts/new.html", user=user, tags=tags)
 
 @app.route('/users/<int:user_id>/posts/new', methods=["POST"])
 def handle_post(user_id):
@@ -185,12 +186,21 @@ def handle_tag(tag_id):
     
     return redirect(f"/tags/{tag.id}/detail")
 
-# @app.route('/tags/<int:tag_id>/delete')
-# def show_delete_page():
-#     """Shows a delete page after a tag has been deleted"""
-#     return render_template("tags/delete.html")
 
-# @app.route('/tags/<int:tag_id>/delete')
-# def handle_
+@app.route('/tags/<int:tag_id>/delete')
+def show_delete_tag_page(tag_id):
+    """Shows the delete page for tags"""
+    tag = get_tag(tag_id)
+    return render_template("tags/delete.html", tag=tag)
+
+@app.route('/tags/<int:tag_id>/delete', methods=["POST"])
+def handle_tag_delete(tag_id):
+    """Updates the database once the tag has been deleted"""
+    tag = get_tag(tag_id)
+    db.session.delete(tag)
+    db.session.commit()
+    return render_template("tags/delete.html", tag=tag)
+
+
 
 
