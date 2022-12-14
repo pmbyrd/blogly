@@ -34,10 +34,11 @@ class UserViewTestCase(TestCase):
         """Test the home view"""
         with app.test_client() as client:
             resp = client.get("/users")
-            html = resp.get_data(as_text=True) 
+            html = resp.get_data(as_text=True)
             
             self.assertEqual(resp.status_code, 200)
-            self.assertIn(f"<h1> Users </h1>", html) 
+            self.assertIn(f"<h1> Users </h1>", html)
+ 
     
     def test_user_detail(self):
         """Test the user detail view"""
@@ -66,10 +67,18 @@ class UserViewTestCase(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertIn(f"""<label for="first-name" class="form-label">First Name</label>""", html)
             
-class PostViewTestCase(self):
+class PostViewTestCase(TestCase):
     """Test for views for Posts"""
     def setUp(self):
         """Add a simple post"""
+        """Add a sample User"""
+        User.query.delete()
+        
+        user = User(first_name="Jon", last_name="Doe")
+        db.session.add(user)
+        db.session.commit()
+        
+        self.user_id = user.id
         
         Post.query.delete()
         post = Post(title="Test Post", content="This is a test post", user_id=1)
@@ -78,6 +87,12 @@ class PostViewTestCase(self):
         db.session.commit()
         
         self.post_id=post.id  
+        
+        Tag.query.delete()
+        tag = Tag(name="Test_Tag")
+        db.session.add(tag)
+        db.commit()
+        self.tag_id = tag.id
         
     def tearDown(self):
         """Clean up any fouled transaction."""
@@ -91,14 +106,36 @@ class PostViewTestCase(self):
             html = resp.get_data(as_text=True)
             
             self.assertEqual(resp.status_code, 200)
-            self.assertIn(f"""<h1>Test Post</h1>""", html)
+            self.assertIn(f"""<h5 class="card-title">Test Post</h5>""", html)
     
     def test_new_post_view(self):
         """Test the new post view"""
         with app.test_client() as client:
-            resp = client.get(f"/users/{self.user_id}/posts/new")
+            resp = client.get(f"/users/{self.post_id}/posts/new")
             html = resp.get_data(as_text=True)
             
             self.assertEqual(resp.status_code, 200)
             self.assertIn(f"""<label for="title" class="form-label">Title</label>""", html)
+    
+    def test_handle_post(self):
+        """Test the handle post view"""
+        
+        with app.test_client() as client:
+            resp = client.post(f"/users/{self.post_id}/posts/new",
+                               data={"title": "Test Post", "content": "This is a test post"},
+                               follow_redirects=True)
             
+            html = resp.get_data(as_text=True)
+            
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn(f"""<h1>Test Post</h1>""", html)
+    
+    def test_tag_detail_view(self):
+        """Test the tag detail view"""
+        
+        with app.test_client() as client:
+            resp = client.get(f"/tags/{self.tag_id}/detail")
+            html = resp.get_data(as_text=True)
+            
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn(f"""<h3 class="card-title">Test_Tag</h3>""", html)
